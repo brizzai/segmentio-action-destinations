@@ -17,25 +17,28 @@ All actions support batching (up to 100 events per request).
 
 Each action extracts these fields from the incoming Segment event via `@path` mappings. Users can customize these in the Segment UI.
 
-| Segment field                   | Action field      | Maps to in Brizz event                                                                        |
-| ------------------------------- | ----------------- | --------------------------------------------------------------------------------------------- |
-| `$.event`                       | `name`            | `name` — the event name                                                                       |
-| `$.properties`                  | `properties`      | `body` — free-form event payload                                                              |
-| `$.traits`                      | `traits`          | `body` — user or group traits (identify/group actions)                                        |
-| `$.userId`                      | `userId`          | `attributes["brizz.user_id"]`                                                                 |
-| `$.anonymousId`                 | `anonymousId`     | `attributes["segment.anonymous_id"]`                                                          |
-| `$.timestamp`                   | `timestamp`       | `timestamp` — ISO 8601                                                                        |
-| `$.messageId`                   | `messageId`       | `attributes["segment.message_id"]`                                                            |
-| `$.context`                     | `context`         | Extracts: `page.url`, `page.path`, `page.referrer`, `page.title`, `userAgent`, `locale`, `ip` |
-| `$.properties.brizzSessionId`   | (from properties) | `session_id` — recommended location for session ID                                            |
-| `$.groupId`                     | `groupId`         | Included as `group_id` in `body` (group action only)                                          |
-| `$.category`                    | `category`        | Included in `body` (page action only)                                                         |
-| `$.properties.brizzServiceName` | (from properties) | `service_name` — if not set in destination settings                                           |
-| `$.properties.brizzEnvironment` | (from properties) | `environment` — if not set in destination settings                                            |
+| Segment field                      | Maps to in Brizz event                                                                                        |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `$.event` / `$.name`               | `name` — the event name                                                                                       |
+| `$.properties` / `$.traits`        | `body` — free-form event payload                                                                              |
+| `$.userId`                         | `attributes["brizz.user_id"]`                                                                                 |
+| `$.anonymousId`                    | `attributes["segment.anonymous_id"]`                                                                          |
+| `$.timestamp`                      | `timestamp` — ISO 8601                                                                                        |
+| `$.messageId`                      | `attributes["segment.message_id"]`                                                                            |
+| `$.context`                        | `attributes` — all context fields flattened with dot notation (e.g. `page.url`, `page.path`, `userAgent`)     |
+| `$.groupId`                        | Included as `group_id` in `body` (group action only)                                                          |
+| `$.category`                       | Included in `body` (page action only)                                                                         |
+| `$.properties.brizzSessionId`      | `session_id` — also accepts `brizz.session.id`, `brizz.session_id`                                            |
+| `$.properties.brizzServiceName`    | `service_name` — also accepts `brizz.service.name`, `brizz.service_name`. Destination settings take priority. |
+| `$.properties.brizzEnvironment`    | `environment` — also accepts `brizz.environment`. Destination settings take priority.                         |
+| `$.properties.brizzSeverityNumber` | `severity_number` — also accepts `brizz.severity.number`, `brizz.severity_number` (numeric 0–24).             |
+| `$.properties.brizzSeverity`       | `severity_number` — also accepts `brizz.severity`. String level mapped to number (e.g. "error" → 17).         |
 
 ## Brizz Event Schema
 
-`service_name` and `environment` can be configured statically in destination settings (takes priority) or sent dynamically per-event in properties:
+`service_name` and `environment` can be configured statically in destination settings (takes priority) or sent dynamically per-event in properties. Accepted property keys for `service_name`: `brizzServiceName`, `brizz.service.name`, or `brizz.service_name`. Accepted property keys for `environment`: `brizzEnvironment` or `brizz.environment`.
+
+All context fields are flattened into the Brizz event `attributes` using dot notation. For example, `context.page.url` becomes `attributes["page.url"]`.
 
 ```js
 analytics.track('Order Completed', {
@@ -77,21 +80,21 @@ Each action transforms a Segment event into a Brizz event and sends it to `POST 
 
 ### Required and optional fields
 
-| Field             | Required | Description                                                                            |
-| ----------------- | -------- | -------------------------------------------------------------------------------------- |
-| `name`            | **Yes**  | Event name (e.g. "Order Completed", "identify", "group", "page.Homepage")              |
-| `service_name`    | **Yes**  | Application name. From destination settings or `brizzServiceName` in properties.       |
-| `session_id`      | **Yes**  | Session identifier. From `brizzSessionId` in properties/traits, else empty string.     |
-| `timestamp`       | **Yes**  | ISO 8601 timestamp. From event timestamp, else current time.                           |
-| `source`          | No       | Event source. Always `"segment"` for this destination.                                 |
-| `environment`     | No       | Deployment environment. From destination settings or `brizzEnvironment` in properties. |
-| `severity_number` | No       | OTel severity 0-24. Defaults to 9 (INFO) if omitted.                                   |
-| `attributes`      | No       | Structured key-value metadata (user ID, message ID, page info, etc.).                  |
-| `body`            | No       | Free-form event payload (properties or traits).                                        |
+| Field             | Required | Description                                                                                                                                                                              |
+| ----------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`            | **Yes**  | Event name (e.g. "Order Completed", "identify", "group", "page.Homepage")                                                                                                                |
+| `service_name`    | **Yes**  | Application name. From destination settings or `brizzServiceName` / `brizz.service.name` / `brizz.service_name` in properties.                                                           |
+| `session_id`      | **Yes**  | Session identifier. From `brizzSessionId` / `brizz.session.id` / `brizz.session_id` in properties/traits, else empty string.                                                             |
+| `timestamp`       | **Yes**  | ISO 8601 timestamp. From event timestamp, else current time.                                                                                                                             |
+| `source`          | No       | Event source. Always `"segment"` for this destination.                                                                                                                                   |
+| `environment`     | No       | Deployment environment. From destination settings or `brizzEnvironment` / `brizz.environment` in properties.                                                                             |
+| `severity_number` | No       | OTel severity 0–24. From `brizzSeverityNumber` / `brizz.severity.number` / `brizz.severity_number` (numeric) or `brizzSeverity` / `brizz.severity` (string level). Defaults to 9 (INFO). |
+| `attributes`      | No       | Structured key-value metadata. All context fields flattened with dot notation, plus user ID, message ID, etc.                                                                            |
+| `body`            | No       | Free-form event payload (properties or traits).                                                                                                                                          |
 
 ### session_id
 
-The `session_id` field ties events into a user session in Brizz. Send it as `brizzSessionId` in event properties (track/page) or traits (identify/group):
+The `session_id` field ties events into a user session in Brizz. Send it as any of: `brizzSessionId`, `brizz.session.id`, or `brizz.session_id` in event properties (track/page) or traits (identify/group):
 
 ```js
 analytics.track('Order Completed', {
@@ -100,11 +103,11 @@ analytics.track('Order Completed', {
 })
 ```
 
-Resolution order: `properties.brizzSessionId` -> `traits.brizzSessionId` -> empty string.
+Resolution order: first matching alias in properties -> first matching alias in traits -> empty string.
 
 ### severity_number
 
-OTel severity levels (0–24). Omit to default to 9 (INFO).
+OTel severity levels (0–24). Defaults to 9 (INFO) if not provided. Send as any of: `brizzSeverityNumber`, `brizz.severity.number`, or `brizz.severity_number` (numeric 0–24) in properties. Alternatively, send a string level via `brizzSeverity` or `brizz.severity` (e.g. `"error"`, `"warn"`, `"debug"`).
 
 | Range | Level          |
 | ----- | -------------- |

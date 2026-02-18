@@ -41,71 +41,96 @@ function deriveEventType(eventName: string): string {
   return 'track'
 }
 
+function flattenObject(obj: Record<string, unknown>, prefix = ''): Record<string, unknown> {
+  const result: Record<string, unknown> = {}
+  for (const [key, value] of Object.entries(obj)) {
+    const fullKey = prefix ? `${prefix}.${key}` : key
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      Object.assign(result, flattenObject(value as Record<string, unknown>, fullKey))
+    } else {
+      result[fullKey] = value
+    }
+  }
+  return result
+}
+
+const BRIZZ_FIELD_ALIASES: Record<string, string[]> = {
+  sessionId: ['brizzSessionId', 'brizz.session.id', 'brizz.session_id'],
+  serviceName: ['brizzServiceName', 'brizz.service.name', 'brizz.service_name'],
+  environment: ['brizzEnvironment', 'brizz.environment'],
+  severityNumber: ['brizzSeverityNumber', 'brizz.severity.number', 'brizz.severity_number'],
+  severity: ['brizzSeverity', 'brizz.severity']
+}
+
+const SEVERITY_MAP: Record<string, number> = {
+  trace: 1,
+  debug: 5,
+  info: 9,
+  warn: 13,
+  warning: 13,
+  error: 17,
+  fatal: 21,
+  critical: 21
+}
+
+function lookupBrizzField(props: Record<string, unknown>, field: string): string | undefined {
+  const aliases = BRIZZ_FIELD_ALIASES[field]
+  if (!aliases) return undefined
+  for (const key of aliases) {
+    const val = props[key]
+    if (typeof val === 'string' && val) return val
+  }
+  return undefined
+}
+
+function lookupBrizzSeverity(props: Record<string, unknown>): number | undefined {
+  // 1. Explicit numeric severity via aliases
+  for (const key of BRIZZ_FIELD_ALIASES.severityNumber) {
+    const val = props[key]
+    if (typeof val === 'number' && val >= 0 && val <= 24) return val
+  }
+  // 2. String level via aliases (e.g. "error" → 17)
+  const level = lookupBrizzField(props, 'severity')
+  if (level && SEVERITY_MAP[level.toLowerCase()] !== undefined) {
+    return SEVERITY_MAP[level.toLowerCase()]
+  }
+  return undefined
+}
+
 export function mapToBrizzEvent(
   payload: EventPayload,
   settings: Settings,
   eventName: string,
   body: unknown
 ): BrizzEvent {
-  const attributes: Record<string, unknown> = {}
+  // Flatten all context fields into attributes
+  const attributes: Record<string, unknown> = payload.context ? flattenObject(payload.context) : {}
 
+  // Add standard Segment/Brizz attributes
   if (payload.userId) attributes['brizz.user_id'] = payload.userId
   if (payload.anonymousId) attributes['segment.anonymous_id'] = payload.anonymousId
   if (payload.messageId) attributes['segment.message_id'] = payload.messageId
   attributes['segment.event_type'] = deriveEventType(eventName)
 
-  if (payload.context && typeof payload.context === 'object') {
-    const page = payload.context.page
-    if (page && typeof page === 'object' && !Array.isArray(page)) {
-      const p = page as Record<string, unknown>
-      if (typeof p.url === 'string') attributes['page.url'] = p.url
-      if (typeof p.path === 'string') attributes['page.path'] = p.path
-      if (typeof p.referrer === 'string') attributes['page.referrer'] = p.referrer
-      if (typeof p.title === 'string') attributes['page.title'] = p.title
-    }
-    if (typeof payload.context.userAgent === 'string') attributes['user_agent'] = payload.context.userAgent
-    if (typeof payload.context.locale === 'string') attributes['locale'] = payload.context.locale
-    if (typeof payload.context.ip === 'string') attributes['ip'] = payload.context.ip
-  }
+  // Extract special fields from properties/traits via lookup map
+  const props = payload.properties || payload.traits || {}
 
-  const sessionId =
-    (payload.properties &&
-      typeof payload.properties.brizzSessionId === 'string' &&
-      payload.properties.brizzSessionId) ||
-    (payload.traits && typeof payload.traits.brizzSessionId === 'string' && payload.traits.brizzSessionId) ||
-    ''
-
-  // Settings take priority over dynamic event values
-  const serviceName =
-    settings.serviceName ||
-    (payload.properties && typeof payload.properties.brizzServiceName === 'string'
-      ? payload.properties.brizzServiceName
-      : undefined) ||
-    (payload.traits && typeof payload.traits.brizzServiceName === 'string'
-      ? payload.traits.brizzServiceName
-      : undefined) ||
-    'unknown'
-
-  const environment =
-    settings.environment ||
-    (payload.properties && typeof payload.properties.brizzEnvironment === 'string'
-      ? payload.properties.brizzEnvironment
-      : undefined) ||
-    (payload.traits && typeof payload.traits.brizzEnvironment === 'string'
-      ? payload.traits.brizzEnvironment
-      : undefined) ||
-    undefined
+  // Strip brizz-prefixed keys from body — they're destination metadata, not event data
+  const cleanBody =
+    body && typeof body === 'object' && !Array.isArray(body)
+      ? Object.fromEntries(Object.entries(body as Record<string, unknown>).filter(([k]) => !k.startsWith('brizz')))
+      : body
 
   return {
     name: eventName,
-    service_name: serviceName,
-    session_id: sessionId,
+    service_name: settings.serviceName || lookupBrizzField(props, 'serviceName') || 'unknown',
+    session_id: lookupBrizzField(props, 'sessionId') || '',
     timestamp: toISOTimestamp(payload.timestamp),
     source: 'segment',
-    environment: environment,
-    severity_number: 9,
+    environment: settings.environment || lookupBrizzField(props, 'environment') || undefined,
+    severity_number: lookupBrizzSeverity(props) ?? 9,
     attributes,
-    body
+    body: cleanBody
   }
 }
 

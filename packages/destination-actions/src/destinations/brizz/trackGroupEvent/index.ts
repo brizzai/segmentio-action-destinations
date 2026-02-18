@@ -54,7 +54,7 @@ const action: ActionDefinition<Settings, Payload> = {
     context: {
       label: 'Event Context',
       description:
-        'Segment event context. Brizz extracts page info (context.page.url, context.page.path, context.page.referrer, context.page.title), context.userAgent, context.locale, and context.ip.',
+        'Segment event context. All fields are flattened into Brizz event attributes using dot notation (e.g. context.page.url becomes page.url).',
       type: 'object',
       required: false,
       default: { '@path': '$.context' },

@@ -7,6 +7,7 @@ Object {
     "segment.anonymous_id": "8xjDY9]pa&0Jt0r&(",
     "segment.event_type": "identify",
     "segment.message_id": "8xjDY9]pa&0Jt0r&(",
+    "testType": "8xjDY9]pa&0Jt0r&(",
   },
   "body": Object {
     "testType": "8xjDY9]pa&0Jt0r&(",
@@ -43,6 +44,7 @@ Object {
     "segment.anonymous_id": "#DM^Zh",
     "segment.event_type": "track",
     "segment.message_id": "#DM^Zh",
+    "testType": "#DM^Zh",
   },
   "body": Object {
     "testType": "#DM^Zh",
@@ -79,6 +81,7 @@ Object {
     "segment.anonymous_id": "w@PQ)",
     "segment.event_type": "group",
     "segment.message_id": "w@PQ)",
+    "testType": "w@PQ)",
   },
   "body": Object {
     "group_id": "w@PQ)",
@@ -119,6 +122,7 @@ Object {
     "segment.anonymous_id": "sNJ(8OdawC[d6#bx",
     "segment.event_type": "page",
     "segment.message_id": "sNJ(8OdawC[d6#bx",
+    "testType": "sNJ(8OdawC[d6#bx",
   },
   "body": Object {
     "category": "sNJ(8OdawC[d6#bx",
