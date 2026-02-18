@@ -30,7 +30,7 @@ Create a `.env` file at the repository root (it is already gitignored):
 
 ```sh
 # .env
-BRIZZ_TELEMETRY_KEY=btk_your_telemetry_key
+BRIZZ_API_KEY=btk_your_telemetry_key
 BRIZZ_SERVICE_NAME=my-app
 BRIZZ_ENVIRONMENT=development
 # Only set this if you are targeting a self-hosted or staging Brizz instance.
@@ -76,7 +76,7 @@ curl -X POST http://localhost:3000/authentication \
   -H 'Content-Type: application/json' \
   -d '{
     "settings": {
-      "telemetryKey": "'"$BRIZZ_TELEMETRY_KEY"'",
+      "telemetryKey": "'"$BRIZZ_API_KEY"'",
       "serviceName": "'"$BRIZZ_SERVICE_NAME"'",
       "environment": "'"$BRIZZ_ENVIRONMENT"'"
     }
@@ -92,7 +92,7 @@ curl -X POST http://localhost:3000/trackEvent \
   -H 'Content-Type: application/json' \
   -d '{
     "settings": {
-      "telemetryKey": "'"$BRIZZ_TELEMETRY_KEY"'",
+      "telemetryKey": "'"$BRIZZ_API_KEY"'",
       "serviceName": "'"$BRIZZ_SERVICE_NAME"'",
       "environment": "'"$BRIZZ_ENVIRONMENT"'"
     },
@@ -134,7 +134,7 @@ curl -X POST http://localhost:3000/trackEvent \
   -H 'Content-Type: application/json' \
   -d '{
     "settings": {
-      "telemetryKey": "'"$BRIZZ_TELEMETRY_KEY"'",
+      "telemetryKey": "'"$BRIZZ_API_KEY"'",
       "serviceName": "'"$BRIZZ_SERVICE_NAME"'",
       "environment": "'"$BRIZZ_ENVIRONMENT"'"
     },
@@ -173,7 +173,7 @@ curl -X POST http://localhost:3000/identifyUser \
   -H 'Content-Type: application/json' \
   -d '{
     "settings": {
-      "telemetryKey": "'"$BRIZZ_TELEMETRY_KEY"'",
+      "telemetryKey": "'"$BRIZZ_API_KEY"'",
       "serviceName": "'"$BRIZZ_SERVICE_NAME"'",
       "environment": "'"$BRIZZ_ENVIRONMENT"'"
     },
@@ -205,7 +205,7 @@ curl -X POST http://localhost:3000/trackPageView \
   -H 'Content-Type: application/json' \
   -d '{
     "settings": {
-      "telemetryKey": "'"$BRIZZ_TELEMETRY_KEY"'",
+      "telemetryKey": "'"$BRIZZ_API_KEY"'",
       "serviceName": "'"$BRIZZ_SERVICE_NAME"'",
       "environment": "'"$BRIZZ_ENVIRONMENT"'"
     },
@@ -240,7 +240,7 @@ curl -X POST http://localhost:3000/trackGroupEvent \
   -H 'Content-Type: application/json' \
   -d '{
     "settings": {
-      "telemetryKey": "'"$BRIZZ_TELEMETRY_KEY"'",
+      "telemetryKey": "'"$BRIZZ_API_KEY"'",
       "serviceName": "'"$BRIZZ_SERVICE_NAME"'",
       "environment": "'"$BRIZZ_ENVIRONMENT"'"
     },
