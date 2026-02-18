@@ -51,7 +51,7 @@ describe('Brizz', () => {
         event: 'Order Completed',
         userId: 'user-123',
         anonymousId: 'anon-456',
-        properties: { revenue: 99.99, currency: 'USD', sessionId: 'sess_abc123' }
+        properties: { revenue: 99.99, currency: 'USD', brizzSessionId: 'sess_abc123' }
       })
 
       const responses = await testDestination.testAction('trackEvent', {
@@ -104,7 +104,7 @@ describe('Brizz', () => {
         type: 'identify',
         userId: 'user-789',
         anonymousId: 'anon-456',
-        traits: { email: 'user@example.com', name: 'John Doe', sessionId: 'sess_abc123' }
+        traits: { email: 'user@example.com', name: 'John Doe', brizzSessionId: 'sess_abc123' }
       })
 
       const responses = await testDestination.testAction('identifyUser', {
@@ -155,7 +155,7 @@ describe('Brizz', () => {
         type: 'page',
         name: 'Homepage',
         anonymousId: 'anon-456',
-        properties: { url: 'https://example.com', path: '/', sessionId: 'sess_abc123' }
+        properties: { url: 'https://example.com', path: '/', brizzSessionId: 'sess_abc123' }
       })
 
       const responses = await testDestination.testAction('trackPageView', {
@@ -232,7 +232,7 @@ describe('Brizz', () => {
         type: 'group',
         groupId: 'group-123',
         anonymousId: 'anon-456',
-        traits: { name: 'Acme Corp', plan: 'enterprise', sessionId: 'sess_abc123' }
+        traits: { name: 'Acme Corp', plan: 'enterprise', brizzSessionId: 'sess_abc123' }
       })
 
       const responses = await testDestination.testAction('trackGroupEvent', {

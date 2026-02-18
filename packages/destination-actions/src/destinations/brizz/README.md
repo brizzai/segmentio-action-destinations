@@ -17,21 +17,21 @@ All actions support batching (up to 100 events per request).
 
 Each action extracts these fields from the incoming Segment event via `@path` mappings. Users can customize these in the Segment UI.
 
-| Segment field              | Action field      | Maps to in Brizz event                                                                        |
-| -------------------------- | ----------------- | --------------------------------------------------------------------------------------------- |
-| `$.event`                  | `name`            | `name` — the event name                                                                       |
-| `$.properties`             | `properties`      | `body` — free-form event payload                                                              |
-| `$.traits`                 | `traits`          | `body` — user or group traits (identify/group actions)                                        |
-| `$.userId`                 | `userId`          | `attributes["brizz.user_id"]`                                                                 |
-| `$.anonymousId`            | `anonymousId`     | `attributes["segment.anonymous_id"]`                                                          |
-| `$.timestamp`              | `timestamp`       | `timestamp` — ISO 8601                                                                        |
-| `$.messageId`              | `messageId`       | `attributes["segment.message_id"]`                                                            |
-| `$.context`                | `context`         | Extracts: `page.url`, `page.path`, `page.referrer`, `page.title`, `userAgent`, `locale`, `ip` |
-| `$.properties.sessionId`   | (from properties) | `session_id` — recommended location for session ID                                            |
-| `$.groupId`                | `groupId`         | Included as `group_id` in `body` (group action only)                                          |
-| `$.category`               | `category`        | Included in `body` (page action only)                                                         |
-| `$.properties.serviceName` | (from properties) | `service_name` — if not set in destination settings                                           |
-| `$.properties.environment` | (from properties) | `environment` — if not set in destination settings                                            |
+| Segment field                   | Action field      | Maps to in Brizz event                                                                        |
+| ------------------------------- | ----------------- | --------------------------------------------------------------------------------------------- |
+| `$.event`                       | `name`            | `name` — the event name                                                                       |
+| `$.properties`                  | `properties`      | `body` — free-form event payload                                                              |
+| `$.traits`                      | `traits`          | `body` — user or group traits (identify/group actions)                                        |
+| `$.userId`                      | `userId`          | `attributes["brizz.user_id"]`                                                                 |
+| `$.anonymousId`                 | `anonymousId`     | `attributes["segment.anonymous_id"]`                                                          |
+| `$.timestamp`                   | `timestamp`       | `timestamp` — ISO 8601                                                                        |
+| `$.messageId`                   | `messageId`       | `attributes["segment.message_id"]`                                                            |
+| `$.context`                     | `context`         | Extracts: `page.url`, `page.path`, `page.referrer`, `page.title`, `userAgent`, `locale`, `ip` |
+| `$.properties.brizzSessionId`   | (from properties) | `session_id` — recommended location for session ID                                            |
+| `$.groupId`                     | `groupId`         | Included as `group_id` in `body` (group action only)                                          |
+| `$.category`                    | `category`        | Included in `body` (page action only)                                                         |
+| `$.properties.brizzServiceName` | (from properties) | `service_name` — if not set in destination settings                                           |
+| `$.properties.brizzEnvironment` | (from properties) | `environment` — if not set in destination settings                                            |
 
 ## Brizz Event Schema
 
@@ -39,8 +39,9 @@ Each action extracts these fields from the incoming Segment event via `@path` ma
 
 ```js
 analytics.track('Order Completed', {
-  serviceName: 'my-app',
-  environment: 'production',
+  brizzSessionId: 'sess_abc123',
+  brizzServiceName: 'my-app',
+  brizzEnvironment: 'production',
   revenue: 99.99
 })
 ```
@@ -74,18 +75,32 @@ Each action transforms a Segment event into a Brizz event and sends it to `POST 
 }
 ```
 
+### Required and optional fields
+
+| Field             | Required | Description                                                                            |
+| ----------------- | -------- | -------------------------------------------------------------------------------------- |
+| `name`            | **Yes**  | Event name (e.g. "Order Completed", "identify", "group", "page.Homepage")              |
+| `service_name`    | **Yes**  | Application name. From destination settings or `brizzServiceName` in properties.       |
+| `session_id`      | **Yes**  | Session identifier. From `brizzSessionId` in properties/traits, else empty string.     |
+| `timestamp`       | **Yes**  | ISO 8601 timestamp. From event timestamp, else current time.                           |
+| `source`          | No       | Event source. Always `"segment"` for this destination.                                 |
+| `environment`     | No       | Deployment environment. From destination settings or `brizzEnvironment` in properties. |
+| `severity_number` | No       | OTel severity 0-24. Defaults to 9 (INFO) if omitted.                                   |
+| `attributes`      | No       | Structured key-value metadata (user ID, message ID, page info, etc.).                  |
+| `body`            | No       | Free-form event payload (properties or traits).                                        |
+
 ### session_id
 
-The `session_id` field ties events into a user session in Brizz. Send it as `sessionId` in event properties (track/page) or traits (identify/group):
+The `session_id` field ties events into a user session in Brizz. Send it as `brizzSessionId` in event properties (track/page) or traits (identify/group):
 
 ```js
 analytics.track('Order Completed', {
-  sessionId: 'sess_abc123',
+  brizzSessionId: 'sess_abc123',
   revenue: 99.99
 })
 ```
 
-Resolution order: `properties.sessionId` -> `traits.sessionId` -> empty string.
+Resolution order: `properties.brizzSessionId` -> `traits.brizzSessionId` -> empty string.
 
 ### severity_number
 
@@ -203,7 +218,7 @@ curl -X POST http://localhost:3000/trackEvent \
       "properties": {
         "revenue": 99.99,
         "currency": "USD",
-        "sessionId": "sess_abc123"
+        "brizzSessionId": "sess_abc123"
       },
       "context": {
         "page": { "url": "https://example.com/checkout", "path": "/checkout" },
@@ -268,7 +283,7 @@ curl -X POST http://localhost:3000/trackEvent \
         "event": "Product Viewed",
         "userId": "user-1",
         "timestamp": "2026-01-15T10:30:00.000Z",
-        "properties": { "product_id": "sku-100", "sessionId": "sess_abc123" },
+        "properties": { "product_id": "sku-100", "brizzSessionId": "sess_abc123" },
         "context": {}
       },
       {
@@ -276,7 +291,7 @@ curl -X POST http://localhost:3000/trackEvent \
         "event": "Product Added",
         "userId": "user-2",
         "timestamp": "2026-01-15T10:31:00.000Z",
-        "properties": { "product_id": "sku-200", "sessionId": "sess_abc123" },
+        "properties": { "product_id": "sku-200", "brizzSessionId": "sess_abc123" },
         "context": {}
       }
     ]
@@ -311,7 +326,7 @@ curl -X POST http://localhost:3000/identifyUser \
         "email": "user@example.com",
         "name": "Jane Doe",
         "plan": "enterprise",
-        "sessionId": "sess_abc123"
+        "brizzSessionId": "sess_abc123"
       },
       "timestamp": "2026-01-15T10:30:00.000Z",
       "context": {}
@@ -369,7 +384,7 @@ curl -X POST http://localhost:3000/trackPageView \
         "url": "https://example.com",
         "path": "/",
         "title": "Home",
-        "sessionId": "sess_abc123"
+        "brizzSessionId": "sess_abc123"
       },
       "timestamp": "2026-01-15T10:30:00.000Z",
       "context": {}
@@ -426,7 +441,7 @@ curl -X POST http://localhost:3000/trackGroupEvent \
         "name": "Acme Corp",
         "plan": "enterprise",
         "employees": 120,
-        "sessionId": "sess_abc123"
+        "brizzSessionId": "sess_abc123"
       },
       "timestamp": "2026-01-15T10:30:00.000Z",
       "context": {}

@@ -69,25 +69,31 @@ export function mapToBrizzEvent(
   }
 
   const sessionId =
-    (payload.properties && typeof payload.properties.sessionId === 'string' && payload.properties.sessionId) ||
-    (payload.traits && typeof payload.traits.sessionId === 'string' && payload.traits.sessionId) ||
+    (payload.properties &&
+      typeof payload.properties.brizzSessionId === 'string' &&
+      payload.properties.brizzSessionId) ||
+    (payload.traits && typeof payload.traits.brizzSessionId === 'string' && payload.traits.brizzSessionId) ||
     ''
 
   // Settings take priority over dynamic event values
   const serviceName =
     settings.serviceName ||
-    (payload.properties && typeof payload.properties.serviceName === 'string'
-      ? payload.properties.serviceName
+    (payload.properties && typeof payload.properties.brizzServiceName === 'string'
+      ? payload.properties.brizzServiceName
       : undefined) ||
-    (payload.traits && typeof payload.traits.serviceName === 'string' ? payload.traits.serviceName : undefined) ||
+    (payload.traits && typeof payload.traits.brizzServiceName === 'string'
+      ? payload.traits.brizzServiceName
+      : undefined) ||
     'unknown'
 
   const environment =
     settings.environment ||
-    (payload.properties && typeof payload.properties.environment === 'string'
-      ? payload.properties.environment
+    (payload.properties && typeof payload.properties.brizzEnvironment === 'string'
+      ? payload.properties.brizzEnvironment
       : undefined) ||
-    (payload.traits && typeof payload.traits.environment === 'string' ? payload.traits.environment : undefined) ||
+    (payload.traits && typeof payload.traits.brizzEnvironment === 'string'
+      ? payload.traits.brizzEnvironment
+      : undefined) ||
     undefined
 
   return {
