@@ -40,7 +40,8 @@ describe('Brizz', () => {
             body.service_name === 'test-service' &&
             body.attributes['segment.event_type'] === 'track' &&
             body.attributes['brizz.user_id'] === 'user-123' &&
-            body.attributes['brizz.anonymous_id'] === 'anon-456'
+            body.attributes['segment.anonymous_id'] === 'anon-456' &&
+            body.session_id === 'sess_abc123'
           )
         })
         .reply(200, SUCCESS_RESPONSE)
@@ -50,7 +51,8 @@ describe('Brizz', () => {
         event: 'Order Completed',
         userId: 'user-123',
         anonymousId: 'anon-456',
-        properties: { revenue: 99.99, currency: 'USD' }
+        properties: { revenue: 99.99, currency: 'USD' },
+        context: { sessionId: 'sess_abc123' } as any
       })
 
       const responses = await testDestination.testAction('trackEvent', {
@@ -92,6 +94,8 @@ describe('Brizz', () => {
             body.name === 'identify' &&
             body.attributes['brizz.user_id'] === 'user-789' &&
             body.attributes['segment.event_type'] === 'identify' &&
+            body.attributes['segment.anonymous_id'] === 'anon-456' &&
+            body.session_id === 'sess_abc123' &&
             body.body.email === 'user@example.com'
           )
         })
@@ -100,7 +104,9 @@ describe('Brizz', () => {
       const event = createTestEvent({
         type: 'identify',
         userId: 'user-789',
-        traits: { email: 'user@example.com', name: 'John Doe' }
+        anonymousId: 'anon-456',
+        traits: { email: 'user@example.com', name: 'John Doe' },
+        context: { sessionId: 'sess_abc123' } as any
       })
 
       const responses = await testDestination.testAction('identifyUser', {
@@ -139,14 +145,20 @@ describe('Brizz', () => {
       nock(BASE_URL)
         .post(
           EVENTS_ENDPOINT,
-          (body) => body.name === 'page.Homepage' && body.attributes['segment.event_type'] === 'page'
+          (body) =>
+            body.name === 'page.Homepage' &&
+            body.attributes['segment.event_type'] === 'page' &&
+            body.attributes['segment.anonymous_id'] === 'anon-456' &&
+            body.session_id === 'sess_abc123'
         )
         .reply(200, SUCCESS_RESPONSE)
 
       const event = createTestEvent({
         type: 'page',
         name: 'Homepage',
-        properties: { url: 'https://example.com', path: '/' }
+        anonymousId: 'anon-456',
+        properties: { url: 'https://example.com', path: '/' },
+        context: { sessionId: 'sess_abc123' } as any
       })
 
       const responses = await testDestination.testAction('trackPageView', {
@@ -212,7 +224,9 @@ describe('Brizz', () => {
             body.name === 'group' &&
             body.body.group_id === 'group-123' &&
             body.body.name === 'Acme Corp' &&
-            body.attributes['segment.event_type'] === 'group'
+            body.attributes['segment.event_type'] === 'group' &&
+            body.attributes['segment.anonymous_id'] === 'anon-456' &&
+            body.session_id === 'sess_abc123'
           )
         })
         .reply(200, SUCCESS_RESPONSE)
@@ -220,7 +234,9 @@ describe('Brizz', () => {
       const event = createTestEvent({
         type: 'group',
         groupId: 'group-123',
-        traits: { name: 'Acme Corp', plan: 'enterprise' }
+        anonymousId: 'anon-456',
+        traits: { name: 'Acme Corp', plan: 'enterprise' },
+        context: { sessionId: 'sess_abc123' } as any
       })
 
       const responses = await testDestination.testAction('trackGroupEvent', {

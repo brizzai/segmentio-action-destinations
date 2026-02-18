@@ -50,7 +50,7 @@ export function mapToBrizzEvent(
   const attributes: Record<string, unknown> = {}
 
   if (payload.userId) attributes['brizz.user_id'] = payload.userId
-  if (payload.anonymousId) attributes['brizz.anonymous_id'] = payload.anonymousId
+  if (payload.anonymousId) attributes['segment.anonymous_id'] = payload.anonymousId
   if (payload.messageId) attributes['segment.message_id'] = payload.messageId
   attributes['segment.event_type'] = deriveEventType(eventName)
 
@@ -68,10 +68,17 @@ export function mapToBrizzEvent(
     if (typeof payload.context.ip === 'string') attributes['ip'] = payload.context.ip
   }
 
+  // session_id: explicit user-provided value only
+  const sessionId =
+    (payload.context && typeof payload.context.sessionId === 'string' && payload.context.sessionId) ||
+    (payload.properties && typeof payload.properties.sessionId === 'string' && payload.properties.sessionId) ||
+    (payload.traits && typeof payload.traits.sessionId === 'string' && payload.traits.sessionId) ||
+    ''
+
   return {
     name: eventName,
     service_name: settings.serviceName,
-    session_id: payload.anonymousId || payload.userId || payload.messageId || 'unknown',
+    session_id: sessionId,
     timestamp: toISOTimestamp(payload.timestamp),
     source: 'segment',
     environment: settings.environment || undefined,

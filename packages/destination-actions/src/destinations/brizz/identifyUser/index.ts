@@ -10,7 +10,7 @@ const action: ActionDefinition<Settings, Payload> = {
   fields: {
     traits: {
       label: 'User Traits',
-      description: 'The user traits from the identify call.',
+      description: 'User traits from the identify call (e.g. email, name, plan). Sent as the Brizz event body.',
       type: 'object',
       required: false,
       default: { '@path': '$.traits' },
@@ -18,35 +18,36 @@ const action: ActionDefinition<Settings, Payload> = {
     },
     userId: {
       label: 'User ID',
-      description: 'The user ID associated with the event.',
+      description: 'Authenticated user ID. Stored as the brizz.user_id attribute.',
       type: 'string',
       required: false,
       default: { '@path': '$.userId' }
     },
     anonymousId: {
       label: 'Anonymous ID',
-      description: 'The anonymous ID associated with the event.',
+      description: 'Device-level anonymous ID. Stored as the segment.anonymous_id attribute.',
       type: 'string',
       required: false,
       default: { '@path': '$.anonymousId' }
     },
     timestamp: {
       label: 'Timestamp',
-      description: 'The timestamp of the event.',
+      description: 'Event timestamp in ISO 8601 format. Defaults to the current time if not provided.',
       type: 'datetime',
       required: false,
       default: { '@path': '$.timestamp' }
     },
     messageId: {
       label: 'Message ID',
-      description: 'The Segment message ID.',
+      description: 'Unique Segment message ID. Stored as the segment.message_id attribute.',
       type: 'string',
       required: false,
       default: { '@path': '$.messageId' }
     },
     context: {
       label: 'Event Context',
-      description: 'The Segment event context.',
+      description:
+        'Segment event context. Brizz extracts: context.sessionId (used as session_id), context.page.url, context.page.path, context.page.referrer, context.page.title, context.userAgent, context.locale, context.ip.',
       type: 'object',
       required: false,
       default: { '@path': '$.context' },
