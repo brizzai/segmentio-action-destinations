@@ -10,7 +10,7 @@ const SUCCESS_RESPONSE = { status: 'success', total: 1, success: 1, skipped: 0, 
 
 const SETTINGS = {
   baseUrl: BASE_URL,
-  telemetryKey: 'btk_test_key_123',
+  apiKey: 'test-key',
   serviceName: 'test-service',
   environment: 'production'
 }
@@ -255,10 +255,10 @@ describe('Brizz', () => {
   })
 
   describe('extendRequest', () => {
-    it('should set X-Telemetry-Key and Content-Type headers', async () => {
+    it('should set Authorization and Content-Type headers', async () => {
       nock(BASE_URL)
         .post(EVENTS_ENDPOINT)
-        .matchHeader('X-Telemetry-Key', 'btk_test_key_123')
+        .matchHeader('Authorization', 'Bearer test-key')
         .matchHeader('Content-Type', 'application/json')
         .reply(200, SUCCESS_RESPONSE)
 

@@ -6,9 +6,9 @@ export interface Settings {
    */
   baseUrl?: string
   /**
-   * Your Brizz Telemetry Key found in the dashboard under Settings > API Keys.
+   * Your Brizz API Key found in the dashboard under Settings > API Keys.
    */
-  telemetryKey: string
+  apiKey: string
   /**
    * Name of this service as it appears in Brizz. Used to group events from the same application.
    */

@@ -77,7 +77,7 @@ curl -X POST http://localhost:3000/authentication \
   -H 'Content-Type: application/json' \
   -d '{
     "settings": {
-      "telemetryKey": "'"$BRIZZ_API_KEY"'",
+      "apiKey": "'"$BRIZZ_API_KEY"'",
       "serviceName": "'"$BRIZZ_SERVICE_NAME"'",
       "environment": "'"$BRIZZ_ENVIRONMENT"'"
     }
@@ -93,7 +93,7 @@ curl -X POST http://localhost:3000/trackEvent \
   -H 'Content-Type: application/json' \
   -d '{
     "settings": {
-      "telemetryKey": "'"$BRIZZ_API_KEY"'",
+      "apiKey": "'"$BRIZZ_API_KEY"'",
       "serviceName": "'"$BRIZZ_SERVICE_NAME"'",
       "environment": "'"$BRIZZ_ENVIRONMENT"'"
     },
@@ -135,7 +135,7 @@ curl -X POST http://localhost:3000/trackEvent \
   -H 'Content-Type: application/json' \
   -d '{
     "settings": {
-      "telemetryKey": "'"$BRIZZ_API_KEY"'",
+      "apiKey": "'"$BRIZZ_API_KEY"'",
       "serviceName": "'"$BRIZZ_SERVICE_NAME"'",
       "environment": "'"$BRIZZ_ENVIRONMENT"'"
     },
@@ -174,7 +174,7 @@ curl -X POST http://localhost:3000/identifyUser \
   -H 'Content-Type: application/json' \
   -d '{
     "settings": {
-      "telemetryKey": "'"$BRIZZ_API_KEY"'",
+      "apiKey": "'"$BRIZZ_API_KEY"'",
       "serviceName": "'"$BRIZZ_SERVICE_NAME"'",
       "environment": "'"$BRIZZ_ENVIRONMENT"'"
     },
@@ -206,7 +206,7 @@ curl -X POST http://localhost:3000/trackPageView \
   -H 'Content-Type: application/json' \
   -d '{
     "settings": {
-      "telemetryKey": "'"$BRIZZ_API_KEY"'",
+      "apiKey": "'"$BRIZZ_API_KEY"'",
       "serviceName": "'"$BRIZZ_SERVICE_NAME"'",
       "environment": "'"$BRIZZ_ENVIRONMENT"'"
     },
@@ -241,7 +241,7 @@ curl -X POST http://localhost:3000/trackGroupEvent \
   -H 'Content-Type: application/json' \
   -d '{
     "settings": {
-      "telemetryKey": "'"$BRIZZ_API_KEY"'",
+      "apiKey": "'"$BRIZZ_API_KEY"'",
       "serviceName": "'"$BRIZZ_SERVICE_NAME"'",
       "environment": "'"$BRIZZ_ENVIRONMENT"'"
     },
@@ -282,7 +282,7 @@ Select **Brizz**, then open `http://localhost:3000` in your browser. The UI rend
 
 | Symptom                                                 | Fix                                                                                               |
 | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `401 Unauthorized` from Brizz                           | Verify `telemetryKey` is correct and starts with `brizz-ing`.                                     |
+| `401 Unauthorized` from Brizz                           | Verify `apiKey` is correct and starts with `brizz-ing`.                                           |
 | Snapshot test diff after field change                   | Re-run with `--updateSnapshot` and commit the updated `.snap` file.                               |
 | `ts-jest` version warnings                              | Safe to ignore. The repo uses Jest 30 which is ahead of ts-jest's tested range. Tests still pass. |
 | `Cannot find module '@segment/actions-core'` with `tsc` | Run `yarn build` from the repo root first. Unit tests via `jest` work without a prior build.      |

@@ -24,9 +24,9 @@ const destination: DestinationDefinition<Settings> = {
         format: 'uri',
         default: 'https://telemetry.brizz.dev'
       },
-      telemetryKey: {
-        label: 'Telemetry Key',
-        description: 'Your Brizz Telemetry Key found in the dashboard under Settings > API Keys.',
+      apiKey: {
+        label: 'API Key',
+        description: 'Your Brizz API Key found in the dashboard under Settings > API Keys.',
         type: 'password',
         required: true
       },
@@ -34,13 +34,15 @@ const destination: DestinationDefinition<Settings> = {
         label: 'Service Name',
         description: 'Name of this service as it appears in Brizz. Used to group events from the same application.',
         type: 'string',
-        required: true
+        required: true,
+        default: 'my-app'
       },
       environment: {
         label: 'Environment',
         description: 'Deployment environment (e.g., production, staging, development).',
         type: 'string',
-        required: false
+        required: false,
+        default: 'production'
       }
     },
     testAuthentication: async (request, { settings }) => {
@@ -62,7 +64,7 @@ const destination: DestinationDefinition<Settings> = {
   extendRequest({ settings }) {
     return {
       headers: {
-        'X-Telemetry-Key': settings.telemetryKey,
+        Authorization: `Bearer ${settings.apiKey}`,
         'Content-Type': 'application/json'
       }
     }
