@@ -54,12 +54,12 @@ function flattenObject(obj: Record<string, unknown>, prefix = ''): Record<string
   return result
 }
 
-const BRIZZ_FIELD_ALIASES: Record<string, string[]> = {
-  sessionId: ['brizzSessionId', 'brizz.session.id', 'brizz.session_id'],
-  serviceName: ['brizzServiceName', 'brizz.service.name', 'brizz.service_name'],
-  environment: ['brizzEnvironment', 'brizz.environment'],
-  severityNumber: ['brizzSeverityNumber', 'brizz.severity.number', 'brizz.severity_number'],
-  severity: ['brizzSeverity', 'brizz.severity']
+function brizzAliases(field: string): string[] {
+  const parts = field.split('_')
+  const camel = 'brizz' + parts.map((p) => p[0].toUpperCase() + p.slice(1)).join('')
+  const dot = 'brizz.' + parts.join('.')
+  const underscore = 'brizz.' + field
+  return [...new Set([camel, dot, underscore])]
 }
 
 const SEVERITY_MAP: Record<string, number> = {
@@ -74,9 +74,7 @@ const SEVERITY_MAP: Record<string, number> = {
 }
 
 function lookupBrizzField(props: Record<string, unknown>, field: string): string | undefined {
-  const aliases = BRIZZ_FIELD_ALIASES[field]
-  if (!aliases) return undefined
-  for (const key of aliases) {
+  for (const key of brizzAliases(field)) {
     const val = props[key]
     if (typeof val === 'string' && val) return val
   }
@@ -84,12 +82,10 @@ function lookupBrizzField(props: Record<string, unknown>, field: string): string
 }
 
 function lookupBrizzSeverity(props: Record<string, unknown>): number | undefined {
-  // 1. Explicit numeric severity via aliases
-  for (const key of BRIZZ_FIELD_ALIASES.severityNumber) {
+  for (const key of brizzAliases('severity_number')) {
     const val = props[key]
     if (typeof val === 'number' && val >= 0 && val <= 24) return val
   }
-  // 2. String level via aliases (e.g. "error" → 17)
   const level = lookupBrizzField(props, 'severity')
   if (level && SEVERITY_MAP[level.toLowerCase()] !== undefined) {
     return SEVERITY_MAP[level.toLowerCase()]
@@ -123,11 +119,11 @@ export function mapToBrizzEvent(
 
   return {
     name: eventName,
-    service_name: settings.serviceName || lookupBrizzField(props, 'serviceName') || 'unknown',
-    session_id: lookupBrizzField(props, 'sessionId') || '',
+    service_name: settings.serviceName || lookupBrizzField(props, 'service_name') || 'unknown',
+    session_id: lookupBrizzField(props, 'session_id') || '',
     timestamp: toISOTimestamp(payload.timestamp),
     source: 'segment',
-    environment: settings.environment || lookupBrizzField(props, 'environment') || undefined,
+    environment: settings.environment || lookupBrizzField(props, 'environment'),
     severity_number: lookupBrizzSeverity(props) ?? 9,
     attributes,
     body: cleanBody
