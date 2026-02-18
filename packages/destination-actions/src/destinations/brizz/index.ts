@@ -17,10 +17,12 @@ const destination: DestinationDefinition<Settings> = {
     fields: {
       baseUrl: {
         label: 'Base URL',
-        description: 'Your Brizz instance URL (e.g., https://app.yourdomain.com). Same base URL used in Brizz SDKs.',
+        description:
+          'Override the default Brizz telemetry endpoint. Only change this for self-hosted or staging environments.',
         type: 'string',
-        required: true,
-        format: 'uri'
+        required: false,
+        format: 'uri',
+        default: 'https://telemetry.brizz.dev'
       },
       telemetryKey: {
         label: 'Telemetry Key',
@@ -42,7 +44,8 @@ const destination: DestinationDefinition<Settings> = {
       }
     },
     testAuthentication: async (request, { settings }) => {
-      await request(`${settings.baseUrl}/api/v1/telemetry/raw/events`, {
+      const baseUrl = settings.baseUrl || 'https://telemetry.brizz.dev'
+      await request(`${baseUrl}/api/v1/telemetry/raw/events`, {
         method: 'post',
         json: {
           name: 'segment.connection_test',

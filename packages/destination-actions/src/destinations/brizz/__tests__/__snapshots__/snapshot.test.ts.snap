@@ -32,7 +32,7 @@ Object {
   "session_id": "unknown",
   "severity_number": 9,
   "source": "segment",
-  "timestamp": "2026-02-18T10:00:52.220Z",
+  "timestamp": "2026-02-18T10:09:54.753Z",
 }
 `;
 
@@ -68,7 +68,7 @@ Object {
   "session_id": "unknown",
   "severity_number": 9,
   "source": "segment",
-  "timestamp": "2026-02-18T10:00:52.194Z",
+  "timestamp": "2026-02-18T10:09:54.661Z",
 }
 `;
 
@@ -108,7 +108,7 @@ Object {
   "session_id": "unknown",
   "severity_number": 9,
   "source": "segment",
-  "timestamp": "2026-02-18T10:00:52.265Z",
+  "timestamp": "2026-02-18T10:09:54.856Z",
 }
 `;
 
@@ -146,6 +146,6 @@ Object {
   "session_id": "unknown",
   "severity_number": 9,
   "source": "segment",
-  "timestamp": "2026-02-18T10:00:52.257Z",
+  "timestamp": "2026-02-18T10:09:54.815Z",
 }
 `;

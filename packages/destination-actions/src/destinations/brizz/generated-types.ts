@@ -2,9 +2,9 @@
 
 export interface Settings {
   /**
-   * Your Brizz instance URL (e.g., https://app.yourdomain.com). Same base URL used in Brizz SDKs.
+   * Override the default Brizz telemetry endpoint. Only change this for self-hosted or staging environments.
    */
-  baseUrl: string
+  baseUrl?: string
   /**
    * Your Brizz Telemetry Key found in the dashboard under Settings > API Keys.
    */

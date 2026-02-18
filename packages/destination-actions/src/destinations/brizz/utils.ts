@@ -14,6 +14,8 @@ interface EventPayload {
   category?: string
 }
 
+const DEFAULT_BASE_URL = 'https://telemetry.brizz.dev'
+
 interface BrizzEvent {
   name: string
   service_name: string
@@ -89,7 +91,9 @@ export function sendEvent(
   const events = payloads.map((p) => mapToBrizzEvent(p, settings, eventNameFn(p), bodyFn(p)))
   const json = events.length === 1 ? events[0] : events
 
-  return request(`${settings.baseUrl}/api/v1/telemetry/raw/events`, {
+  const baseUrl = settings.baseUrl || DEFAULT_BASE_URL
+
+  return request(`${baseUrl}/api/v1/telemetry/raw/events`, {
     method: 'post',
     json
   })
