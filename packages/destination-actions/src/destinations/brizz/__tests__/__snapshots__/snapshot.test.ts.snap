@@ -1,0 +1,410 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Brizz payload snapshots with brizz attributes: identifyUser with brizz fields in traits 1`] = `
+Object {
+  "attributes": Object {
+    "brizz.user_id": "user-789",
+    "ip": "8.8.8.8",
+    "library.name": "analytics.js",
+    "library.version": "2.11.1",
+    "locale": "en-US",
+    "location.city": "San Francisco",
+    "location.country": "United States",
+    "location.latitude": 40.2964197,
+    "location.longitude": -76.9411617,
+    "location.speed": 0,
+    "page.path": "/academy/",
+    "page.referrer": "",
+    "page.search": "",
+    "page.title": "Analytics Academy",
+    "page.url": "https://segment.com/academy/",
+    "segment.anonymous_id": "anon-012",
+    "segment.event_type": "identify",
+    "segment.message_id": "msg-002",
+    "timezone": "Europe/Amsterdam",
+    "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1",
+  },
+  "body": Object {
+    "email": "jane@example.com",
+    "name": "Jane Doe",
+    "plan": "enterprise",
+  },
+  "environment": "production",
+  "name": "identify",
+  "service_name": "test-service",
+  "session_id": "sess_identify",
+  "severity_number": 9,
+  "source": "segment",
+  "timestamp": "2026-01-15T12:00:00.000Z",
+}
+`;
+
+exports[`Brizz payload snapshots with brizz attributes: trackEvent batch with brizz fields 1`] = `
+Array [
+  Object {
+    "attributes": Object {
+      "brizz.user_id": "user-a",
+      "ip": "8.8.8.8",
+      "library.name": "analytics.js",
+      "library.version": "2.11.1",
+      "locale": "en-US",
+      "location.city": "San Francisco",
+      "location.country": "United States",
+      "location.latitude": 40.2964197,
+      "location.longitude": -76.9411617,
+      "location.speed": 0,
+      "page.path": "/academy/",
+      "page.referrer": "",
+      "page.search": "",
+      "page.title": "Analytics Academy",
+      "page.url": "https://segment.com/academy/",
+      "segment.anonymous_id": "anonId1234",
+      "segment.event_type": "track",
+      "segment.message_id": "msg-006",
+      "timezone": "Europe/Amsterdam",
+      "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1",
+    },
+    "body": Object {
+      "item": "widget",
+    },
+    "environment": "production",
+    "name": "Item Added",
+    "service_name": "test-service",
+    "session_id": "sess_batch",
+    "severity_number": 5,
+    "source": "segment",
+    "timestamp": "2026-01-15T15:00:00.000Z",
+  },
+  Object {
+    "attributes": Object {
+      "brizz.user_id": "user-b",
+      "ip": "8.8.8.8",
+      "library.name": "analytics.js",
+      "library.version": "2.11.1",
+      "locale": "en-US",
+      "location.city": "San Francisco",
+      "location.country": "United States",
+      "location.latitude": 40.2964197,
+      "location.longitude": -76.9411617,
+      "location.speed": 0,
+      "page.path": "/academy/",
+      "page.referrer": "",
+      "page.search": "",
+      "page.title": "Analytics Academy",
+      "page.url": "https://segment.com/academy/",
+      "segment.anonymous_id": "anonId1234",
+      "segment.event_type": "track",
+      "segment.message_id": "msg-007",
+      "timezone": "Europe/Amsterdam",
+      "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1",
+    },
+    "body": Object {
+      "item": "gadget",
+    },
+    "environment": "production",
+    "name": "Item Removed",
+    "service_name": "test-service",
+    "session_id": "sess_batch",
+    "severity_number": 17,
+    "source": "segment",
+    "timestamp": "2026-01-15T15:01:00.000Z",
+  },
+]
+`;
+
+exports[`Brizz payload snapshots with brizz attributes: trackEvent with brizz fields 1`] = `
+Object {
+  "attributes": Object {
+    "brizz.user_id": "user-123",
+    "locale": "en-US",
+    "page.path": "/checkout",
+    "page.url": "https://example.com/checkout",
+    "segment.anonymous_id": "anon-456",
+    "segment.event_type": "track",
+    "segment.message_id": "msg-001",
+    "userAgent": "Mozilla/5.0",
+  },
+  "body": Object {
+    "currency": "USD",
+    "revenue": 99.99,
+  },
+  "environment": "production",
+  "name": "Order Completed",
+  "service_name": "test-service",
+  "session_id": "sess_abc123",
+  "severity_number": 13,
+  "source": "segment",
+  "timestamp": "2026-01-15T10:30:00.000Z",
+}
+`;
+
+exports[`Brizz payload snapshots with brizz attributes: trackEvent with dynamic serviceName and environment from properties 1`] = `
+Object {
+  "attributes": Object {
+    "brizz.user_id": "user-456",
+    "ip": "8.8.8.8",
+    "library.name": "analytics.js",
+    "library.version": "2.11.1",
+    "locale": "en-US",
+    "location.city": "San Francisco",
+    "location.country": "United States",
+    "location.latitude": 40.2964197,
+    "location.longitude": -76.9411617,
+    "location.speed": 0,
+    "page.path": "/academy/",
+    "page.referrer": "",
+    "page.search": "",
+    "page.title": "Analytics Academy",
+    "page.url": "https://segment.com/academy/",
+    "segment.anonymous_id": "anonId1234",
+    "segment.event_type": "track",
+    "segment.message_id": "msg-003",
+    "timezone": "Europe/Amsterdam",
+    "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1",
+  },
+  "body": Object {
+    "amount": 150,
+  },
+  "environment": "staging",
+  "name": "Payment Processed",
+  "service_name": "checkout-svc",
+  "session_id": "sess_dynamic",
+  "severity_number": 17,
+  "source": "segment",
+  "timestamp": "2026-01-15T11:00:00.000Z",
+}
+`;
+
+exports[`Brizz payload snapshots with brizz attributes: trackGroupEvent with brizz fields in traits 1`] = `
+Object {
+  "attributes": Object {
+    "brizz.user_id": "user-654",
+    "ip": "8.8.8.8",
+    "library.name": "analytics.js",
+    "library.version": "2.11.1",
+    "locale": "en-US",
+    "location.city": "San Francisco",
+    "location.country": "United States",
+    "location.latitude": 40.2964197,
+    "location.longitude": -76.9411617,
+    "location.speed": 0,
+    "page.path": "/academy/",
+    "page.referrer": "",
+    "page.search": "",
+    "page.title": "Analytics Academy",
+    "page.url": "https://segment.com/academy/",
+    "segment.anonymous_id": "anonId1234",
+    "segment.event_type": "group",
+    "segment.message_id": "msg-005",
+    "timezone": "Europe/Amsterdam",
+    "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1",
+  },
+  "body": Object {
+    "employees": 120,
+    "group_id": "org-555",
+    "name": "Acme Corp",
+    "plan": "enterprise",
+  },
+  "environment": "production",
+  "name": "group",
+  "service_name": "test-service",
+  "session_id": "sess_group",
+  "severity_number": 5,
+  "source": "segment",
+  "timestamp": "2026-01-15T14:00:00.000Z",
+}
+`;
+
+exports[`Brizz payload snapshots with brizz attributes: trackPageView with brizz fields 1`] = `
+Object {
+  "attributes": Object {
+    "brizz.user_id": "user-321",
+    "ip": "8.8.8.8",
+    "library.name": "analytics.js",
+    "library.version": "2.11.1",
+    "locale": "en-US",
+    "location.city": "San Francisco",
+    "location.country": "United States",
+    "location.latitude": 40.2964197,
+    "location.longitude": -76.9411617,
+    "location.speed": 0,
+    "page.path": "/academy/",
+    "page.referrer": "",
+    "page.search": "",
+    "page.title": "Analytics Academy",
+    "page.url": "https://segment.com/academy/",
+    "segment.anonymous_id": "anonId1234",
+    "segment.event_type": "page",
+    "segment.message_id": "msg-004",
+    "timezone": "Europe/Amsterdam",
+    "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1",
+  },
+  "body": Object {
+    "category": "Marketing",
+    "path": "/pricing",
+    "title": "Pricing Page",
+    "url": "https://example.com/pricing",
+  },
+  "environment": "production",
+  "name": "page.Pricing",
+  "service_name": "test-service",
+  "session_id": "sess_page",
+  "severity_number": 9,
+  "source": "segment",
+  "timestamp": "2026-01-15T13:00:00.000Z",
+}
+`;
+
+exports[`Testing snapshot for actions-brizz destination: identifyUser action - all fields 1`] = `
+Object {
+  "attributes": Object {
+    "brizz.user_id": "8xjDY9]pa&0Jt0r&(",
+    "segment.anonymous_id": "8xjDY9]pa&0Jt0r&(",
+    "segment.event_type": "identify",
+    "segment.message_id": "8xjDY9]pa&0Jt0r&(",
+    "testType": "8xjDY9]pa&0Jt0r&(",
+  },
+  "body": Object {
+    "testType": "8xjDY9]pa&0Jt0r&(",
+  },
+  "environment": "8xjDY9]pa&0Jt0r&(",
+  "name": "identify",
+  "service_name": "8xjDY9]pa&0Jt0r&(",
+  "session_id": "",
+  "severity_number": 9,
+  "source": "segment",
+  "timestamp": "2021-02-01T00:00:00.000Z",
+}
+`;
+
+exports[`Testing snapshot for actions-brizz destination: identifyUser action - required fields 1`] = `
+Object {
+  "attributes": Object {
+    "segment.event_type": "identify",
+  },
+  "environment": "8xjDY9]pa&0Jt0r&(",
+  "name": "identify",
+  "service_name": "8xjDY9]pa&0Jt0r&(",
+  "session_id": "",
+  "severity_number": 9,
+  "source": "segment",
+  "timestamp": "2024-01-01T00:00:00.000Z",
+}
+`;
+
+exports[`Testing snapshot for actions-brizz destination: trackEvent action - all fields 1`] = `
+Object {
+  "attributes": Object {
+    "brizz.user_id": "#DM^Zh",
+    "segment.anonymous_id": "#DM^Zh",
+    "segment.event_type": "track",
+    "segment.message_id": "#DM^Zh",
+    "testType": "#DM^Zh",
+  },
+  "body": Object {
+    "testType": "#DM^Zh",
+  },
+  "environment": "#DM^Zh",
+  "name": "#DM^Zh",
+  "service_name": "#DM^Zh",
+  "session_id": "",
+  "severity_number": 9,
+  "source": "segment",
+  "timestamp": "2021-02-01T00:00:00.000Z",
+}
+`;
+
+exports[`Testing snapshot for actions-brizz destination: trackEvent action - required fields 1`] = `
+Object {
+  "attributes": Object {
+    "segment.event_type": "track",
+  },
+  "environment": "#DM^Zh",
+  "name": "#DM^Zh",
+  "service_name": "#DM^Zh",
+  "session_id": "",
+  "severity_number": 9,
+  "source": "segment",
+  "timestamp": "2024-01-01T00:00:00.000Z",
+}
+`;
+
+exports[`Testing snapshot for actions-brizz destination: trackGroupEvent action - all fields 1`] = `
+Object {
+  "attributes": Object {
+    "brizz.user_id": "w@PQ)",
+    "segment.anonymous_id": "w@PQ)",
+    "segment.event_type": "group",
+    "segment.message_id": "w@PQ)",
+    "testType": "w@PQ)",
+  },
+  "body": Object {
+    "group_id": "w@PQ)",
+    "testType": "w@PQ)",
+  },
+  "environment": "w@PQ)",
+  "name": "group",
+  "service_name": "w@PQ)",
+  "session_id": "",
+  "severity_number": 9,
+  "source": "segment",
+  "timestamp": "2021-02-01T00:00:00.000Z",
+}
+`;
+
+exports[`Testing snapshot for actions-brizz destination: trackGroupEvent action - required fields 1`] = `
+Object {
+  "attributes": Object {
+    "segment.event_type": "group",
+  },
+  "body": Object {
+    "group_id": "w@PQ)",
+  },
+  "environment": "w@PQ)",
+  "name": "group",
+  "service_name": "w@PQ)",
+  "session_id": "",
+  "severity_number": 9,
+  "source": "segment",
+  "timestamp": "2024-01-01T00:00:00.000Z",
+}
+`;
+
+exports[`Testing snapshot for actions-brizz destination: trackPageView action - all fields 1`] = `
+Object {
+  "attributes": Object {
+    "brizz.user_id": "sNJ(8OdawC[d6#bx",
+    "segment.anonymous_id": "sNJ(8OdawC[d6#bx",
+    "segment.event_type": "page",
+    "segment.message_id": "sNJ(8OdawC[d6#bx",
+    "testType": "sNJ(8OdawC[d6#bx",
+  },
+  "body": Object {
+    "category": "sNJ(8OdawC[d6#bx",
+    "testType": "sNJ(8OdawC[d6#bx",
+  },
+  "environment": "sNJ(8OdawC[d6#bx",
+  "name": "page.sNJ(8OdawC[d6#bx",
+  "service_name": "sNJ(8OdawC[d6#bx",
+  "session_id": "",
+  "severity_number": 9,
+  "source": "segment",
+  "timestamp": "2021-02-01T00:00:00.000Z",
+}
+`;
+
+exports[`Testing snapshot for actions-brizz destination: trackPageView action - required fields 1`] = `
+Object {
+  "attributes": Object {
+    "segment.event_type": "page",
+  },
+  "body": Object {},
+  "environment": "sNJ(8OdawC[d6#bx",
+  "name": "page_view",
+  "service_name": "sNJ(8OdawC[d6#bx",
+  "session_id": "",
+  "severity_number": 9,
+  "source": "segment",
+  "timestamp": "2024-01-01T00:00:00.000Z",
+}
+`;
