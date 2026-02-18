@@ -5,19 +5,19 @@ import { sendEvent } from '../utils'
 
 const action: ActionDefinition<Settings, Payload> = {
   title: 'Track Group Event',
-  description: 'Send Segment group events to Brizz as group association events.',
+  description: 'Send Segment group events to Brizz.',
   defaultSubscription: 'type = "group"',
   fields: {
     groupId: {
       label: 'Group ID',
-      description: 'The group ID from the group call.',
+      description: 'The group ID.',
       type: 'string',
       required: true,
       default: { '@path': '$.groupId' }
     },
     traits: {
       label: 'Group Traits',
-      description: 'The group traits from the group call.',
+      description: 'The group traits.',
       type: 'object',
       required: false,
       default: { '@path': '$.traits' },
@@ -46,14 +46,14 @@ const action: ActionDefinition<Settings, Payload> = {
     },
     messageId: {
       label: 'Message ID',
-      description: 'The Segment message ID for deduplication.',
+      description: 'The Segment message ID.',
       type: 'string',
       required: false,
       default: { '@path': '$.messageId' }
     },
     context: {
       label: 'Event Context',
-      description: 'The Segment event context (page, userAgent, etc.).',
+      description: 'The Segment event context.',
       type: 'object',
       required: false,
       default: { '@path': '$.context' },
@@ -61,34 +61,35 @@ const action: ActionDefinition<Settings, Payload> = {
     },
     enable_batching: {
       label: 'Enable Batching',
+      description: 'When enabled, events are sent in batches to Brizz.',
       type: 'boolean',
       default: true,
       unsafe_hidden: true
     },
     batch_size: {
       label: 'Batch Size',
-      description: 'Maximum number of events to include in each batch. Actual batch sizes may be lower.',
+      description: 'Maximum number of events per batch.',
       type: 'number',
       default: 100,
       unsafe_hidden: true
     }
   },
-  perform: (request, { payload, settings }) => {
+  perform: (request, { settings, payload }) => {
     return sendEvent(
       request,
       settings,
       [payload],
       () => 'group',
-      (p) => ({ group_id: p.groupId, ...((p.traits as Record<string, unknown>) ?? {}) })
+      (p) => ({ group_id: p.groupId, ...(p.traits ?? {}) })
     )
   },
-  performBatch: (request, { payload, settings }) => {
+  performBatch: (request, { settings, payload }) => {
     return sendEvent(
       request,
       settings,
       payload,
       () => 'group',
-      (p) => ({ group_id: p.groupId, ...((p.traits as Record<string, unknown>) ?? {}) })
+      (p) => ({ group_id: p.groupId, ...(p.traits ?? {}) })
     )
   }
 }

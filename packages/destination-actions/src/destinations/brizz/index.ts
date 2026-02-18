@@ -17,29 +17,26 @@ const destination: DestinationDefinition<Settings> = {
     fields: {
       baseUrl: {
         label: 'Base URL',
-        description:
-          'Your Brizz base URL (e.g., https://gateway.yourdomain.com). This is the same base URL used in Brizz SDKs.',
+        description: 'Your Brizz instance URL (e.g., https://app.yourdomain.com). Same base URL used in Brizz SDKs.',
         type: 'string',
         required: true,
         format: 'uri'
       },
       telemetryKey: {
         label: 'Telemetry Key',
-        description:
-          'Your Brizz Telemetry Key. Found in the Brizz dashboard under Settings > Telemetry Keys. Starts with btk_.',
+        description: 'Your Brizz Telemetry Key found in the dashboard under Settings > API Keys.',
         type: 'password',
         required: true
       },
       serviceName: {
         label: 'Service Name',
-        description:
-          'The name of this service as it will appear in Brizz. Used to group events and identify the source application.',
+        description: 'Name of this service as it appears in Brizz. Used to group events from the same application.',
         type: 'string',
         required: true
       },
       environment: {
         label: 'Environment',
-        description: 'The deployment environment (e.g., production, staging, development). Optional.',
+        description: 'Deployment environment (e.g., production, staging, development).',
         type: 'string',
         required: false
       }

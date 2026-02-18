@@ -2,19 +2,19 @@
 
 export interface Settings {
   /**
-   * Your Brizz base URL (e.g., https://gateway.yourdomain.com). This is the same base URL used in Brizz SDKs.
+   * Your Brizz instance URL (e.g., https://app.yourdomain.com). Same base URL used in Brizz SDKs.
    */
   baseUrl: string
   /**
-   * Your Brizz Telemetry Key. Found in the Brizz dashboard under Settings > Telemetry Keys. Starts with btk_.
+   * Your Brizz Telemetry Key found in the dashboard under Settings > API Keys.
    */
   telemetryKey: string
   /**
-   * The name of this service as it will appear in Brizz. Used to group events and identify the source application.
+   * Name of this service as it appears in Brizz. Used to group events from the same application.
    */
   serviceName: string
   /**
-   * The deployment environment (e.g., production, staging, development). Optional.
+   * Deployment environment (e.g., production, staging, development).
    */
   environment?: string
 }

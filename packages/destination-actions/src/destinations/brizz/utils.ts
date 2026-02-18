@@ -7,7 +7,7 @@ interface EventPayload {
   traits?: Record<string, unknown>
   userId?: string | null
   anonymousId?: string | null
-  timestamp?: string | null
+  timestamp?: string | number | null
   messageId?: string | null
   context?: Record<string, unknown> | null
   groupId?: string
@@ -26,6 +26,19 @@ interface BrizzEvent {
   body: unknown
 }
 
+function toISOTimestamp(value: string | number | null | undefined): string {
+  if (!value) return new Date().toISOString()
+  if (typeof value === 'number') return new Date(value).toISOString()
+  return value
+}
+
+function deriveEventType(eventName: string): string {
+  if (eventName === 'identify') return 'identify'
+  if (eventName === 'group') return 'group'
+  if (eventName.startsWith('page')) return 'page'
+  return 'track'
+}
+
 export function mapToBrizzEvent(
   payload: EventPayload,
   settings: Settings,
@@ -34,49 +47,30 @@ export function mapToBrizzEvent(
 ): BrizzEvent {
   const attributes: Record<string, unknown> = {}
 
-  if (payload.userId) {
-    attributes['brizz.user_id'] = payload.userId
-  }
-  if (payload.anonymousId) {
-    attributes['brizz.anonymous_id'] = payload.anonymousId
-  }
+  if (payload.userId) attributes['brizz.user_id'] = payload.userId
+  if (payload.anonymousId) attributes['brizz.anonymous_id'] = payload.anonymousId
+  if (payload.messageId) attributes['segment.message_id'] = payload.messageId
+  attributes['segment.event_type'] = deriveEventType(eventName)
 
-  if (payload.messageId) {
-    attributes['segment.message_id'] = payload.messageId
-  }
-  attributes['segment.event_type'] =
-    eventName === 'identify'
-      ? 'identify'
-      : eventName === 'group'
-      ? 'group'
-      : eventName.startsWith('page')
-      ? 'page'
-      : 'track'
-
-  if (payload.context) {
-    const page = payload.context.page as Record<string, string> | undefined
-    if (page) {
-      if (page.url) attributes['page.url'] = page.url
-      if (page.path) attributes['page.path'] = page.path
-      if (page.referrer) attributes['page.referrer'] = page.referrer
-      if (page.title) attributes['page.title'] = page.title
+  if (payload.context && typeof payload.context === 'object') {
+    const page = payload.context.page
+    if (page && typeof page === 'object' && !Array.isArray(page)) {
+      const p = page as Record<string, unknown>
+      if (typeof p.url === 'string') attributes['page.url'] = p.url
+      if (typeof p.path === 'string') attributes['page.path'] = p.path
+      if (typeof p.referrer === 'string') attributes['page.referrer'] = p.referrer
+      if (typeof p.title === 'string') attributes['page.title'] = p.title
     }
-    if (payload.context.userAgent) {
-      attributes['user_agent'] = payload.context.userAgent
-    }
-    if (payload.context.locale) {
-      attributes['locale'] = payload.context.locale
-    }
-    if (payload.context.ip) {
-      attributes['ip'] = payload.context.ip
-    }
+    if (typeof payload.context.userAgent === 'string') attributes['user_agent'] = payload.context.userAgent
+    if (typeof payload.context.locale === 'string') attributes['locale'] = payload.context.locale
+    if (typeof payload.context.ip === 'string') attributes['ip'] = payload.context.ip
   }
 
   return {
     name: eventName,
     service_name: settings.serviceName,
     session_id: payload.anonymousId || payload.userId || payload.messageId || 'unknown',
-    timestamp: payload.timestamp || new Date().toISOString(),
+    timestamp: toISOTimestamp(payload.timestamp),
     source: 'segment',
     environment: settings.environment || undefined,
     severity_number: 9,

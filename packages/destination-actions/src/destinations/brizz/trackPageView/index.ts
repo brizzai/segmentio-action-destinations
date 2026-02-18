@@ -24,7 +24,7 @@ const action: ActionDefinition<Settings, Payload> = {
     },
     properties: {
       label: 'Page Properties',
-      description: 'The page properties/payload.',
+      description: 'The page properties.',
       type: 'object',
       required: false,
       default: { '@path': '$.properties' },
@@ -53,14 +53,14 @@ const action: ActionDefinition<Settings, Payload> = {
     },
     messageId: {
       label: 'Message ID',
-      description: 'The Segment message ID for deduplication.',
+      description: 'The Segment message ID.',
       type: 'string',
       required: false,
       default: { '@path': '$.messageId' }
     },
     context: {
       label: 'Event Context',
-      description: 'The Segment event context (page, userAgent, etc.).',
+      description: 'The Segment event context.',
       type: 'object',
       required: false,
       default: { '@path': '$.context' },
@@ -68,34 +68,35 @@ const action: ActionDefinition<Settings, Payload> = {
     },
     enable_batching: {
       label: 'Enable Batching',
+      description: 'When enabled, events are sent in batches to Brizz.',
       type: 'boolean',
       default: true,
       unsafe_hidden: true
     },
     batch_size: {
       label: 'Batch Size',
-      description: 'Maximum number of events to include in each batch. Actual batch sizes may be lower.',
+      description: 'Maximum number of events per batch.',
       type: 'number',
       default: 100,
       unsafe_hidden: true
     }
   },
-  perform: (request, { payload, settings }) => {
+  perform: (request, { settings, payload }) => {
     return sendEvent(
       request,
       settings,
       [payload],
       (p) => (p.name ? `page.${p.name}` : 'page_view'),
-      (p) => ({ category: p.category, ...((p.properties as Record<string, unknown>) ?? {}) })
+      (p) => ({ category: p.category, ...(p.properties ?? {}) })
     )
   },
-  performBatch: (request, { payload, settings }) => {
+  performBatch: (request, { settings, payload }) => {
     return sendEvent(
       request,
       settings,
       payload,
       (p) => (p.name ? `page.${p.name}` : 'page_view'),
-      (p) => ({ category: p.category, ...((p.properties as Record<string, unknown>) ?? {}) })
+      (p) => ({ category: p.category, ...(p.properties ?? {}) })
     )
   }
 }

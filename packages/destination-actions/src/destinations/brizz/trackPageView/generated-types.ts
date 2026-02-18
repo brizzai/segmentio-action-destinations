@@ -10,7 +10,7 @@ export interface Payload {
    */
   category?: string
   /**
-   * The page properties/payload.
+   * The page properties.
    */
   properties?: {
     [k: string]: unknown
@@ -28,18 +28,21 @@ export interface Payload {
    */
   timestamp?: string | number
   /**
-   * The Segment message ID for deduplication.
+   * The Segment message ID.
    */
   messageId?: string
   /**
-   * The Segment event context (page, userAgent, etc.).
+   * The Segment event context.
    */
   context?: {
     [k: string]: unknown
   }
+  /**
+   * When enabled, events are sent in batches to Brizz.
+   */
   enable_batching?: boolean
   /**
-   * Maximum number of events to include in each batch. Actual batch sizes may be lower.
+   * Maximum number of events per batch.
    */
   batch_size?: number
 }
