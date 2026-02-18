@@ -30,7 +30,7 @@ Create a `.env` file at the repository root (it is already gitignored):
 
 ```sh
 # .env
-BRIZZ_API_KEY=btk_your_telemetry_key
+BRIZZ_API_KEY=brizz-ing_your_api_key
 BRIZZ_SERVICE_NAME=my-app
 BRIZZ_ENVIRONMENT=development
 # Only set this if you are targeting a self-hosted or staging Brizz instance.
@@ -281,7 +281,7 @@ Select **Brizz**, then open `http://localhost:3000` in your browser. The UI rend
 
 | Symptom                                                 | Fix                                                                                               |
 | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `401 Unauthorized` from Brizz                           | Verify `telemetryKey` is correct and starts with `btk_`.                                          |
+| `401 Unauthorized` from Brizz                           | Verify `telemetryKey` is correct and starts with `brizz-ing`.                                     |
 | Snapshot test diff after field change                   | Re-run with `--updateSnapshot` and commit the updated `.snap` file.                               |
 | `ts-jest` version warnings                              | Safe to ignore. The repo uses Jest 30 which is ahead of ts-jest's tested range. Tests still pass. |
 | `Cannot find module '@segment/actions-core'` with `tsc` | Run `yarn build` from the repo root first. Unit tests via `jest` work without a prior build.      |
