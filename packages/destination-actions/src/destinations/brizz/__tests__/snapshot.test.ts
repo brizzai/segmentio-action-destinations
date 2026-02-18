@@ -3,6 +3,9 @@ import { generateTestData } from '../../../lib/test-data'
 import destination from '../index'
 import nock from 'nock'
 
+const fixedDate = new Date('2024-01-01T00:00:00.000Z')
+jest.spyOn(global, 'Date').mockImplementation(() => fixedDate as unknown as Date)
+
 const testDestination = createTestIntegration(destination)
 const destinationSlug = 'actions-brizz'
 
