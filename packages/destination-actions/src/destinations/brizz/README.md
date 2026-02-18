@@ -70,22 +70,20 @@ Select **Brizz** from the menu. The server starts on port `3000` by default (ove
 
 ### Test Authentication
 
-Verifies your telemetry key against the Brizz API:
+Verifies your API key against the Brizz API. Note: `/authenticate` expects fields at the root level (no `settings` wrapper).
 
 ```sh
 curl -X POST http://localhost:3000/authenticate \
   -H 'Content-Type: application/json' \
   -d '{
-    "settings": {
-      "baseUrl": "'"$BRIZZ_BASE_URL"'",
-      "apiKey": "'"$BRIZZ_API_KEY"'",
-      "serviceName": "'"$BRIZZ_SERVICE_NAME"'",
-      "environment": "'"$BRIZZ_ENVIRONMENT"'"
-    }
+    "baseUrl": "'"$BRIZZ_BASE_URL"'",
+    "apiKey": "'"$BRIZZ_API_KEY"'",
+    "serviceName": "'"$BRIZZ_SERVICE_NAME"'",
+    "environment": "'"$BRIZZ_ENVIRONMENT"'"
   }'
 ```
 
-A `200` response means the credentials are valid.
+A `200` response with `{"ok": true}` means the credentials are valid.
 
 ### Track Event
 
