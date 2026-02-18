@@ -68,20 +68,35 @@ export function mapToBrizzEvent(
     if (typeof payload.context.ip === 'string') attributes['ip'] = payload.context.ip
   }
 
-  // session_id: explicit user-provided value only
   const sessionId =
-    (payload.context && typeof payload.context.sessionId === 'string' && payload.context.sessionId) ||
     (payload.properties && typeof payload.properties.sessionId === 'string' && payload.properties.sessionId) ||
     (payload.traits && typeof payload.traits.sessionId === 'string' && payload.traits.sessionId) ||
     ''
 
+  // Settings take priority over dynamic event values
+  const serviceName =
+    settings.serviceName ||
+    (payload.properties && typeof payload.properties.serviceName === 'string'
+      ? payload.properties.serviceName
+      : undefined) ||
+    (payload.traits && typeof payload.traits.serviceName === 'string' ? payload.traits.serviceName : undefined) ||
+    'unknown'
+
+  const environment =
+    settings.environment ||
+    (payload.properties && typeof payload.properties.environment === 'string'
+      ? payload.properties.environment
+      : undefined) ||
+    (payload.traits && typeof payload.traits.environment === 'string' ? payload.traits.environment : undefined) ||
+    undefined
+
   return {
     name: eventName,
-    service_name: settings.serviceName,
+    service_name: serviceName,
     session_id: sessionId,
     timestamp: toISOTimestamp(payload.timestamp),
     source: 'segment',
-    environment: settings.environment || undefined,
+    environment: environment,
     severity_number: 9,
     attributes,
     body

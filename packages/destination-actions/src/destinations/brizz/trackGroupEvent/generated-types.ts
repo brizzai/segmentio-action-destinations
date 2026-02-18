@@ -2,33 +2,33 @@
 
 export interface Payload {
   /**
-   * The group ID.
+   * The group identifier. Included as group_id in the Brizz event body.
    */
   groupId: string
   /**
-   * The group traits.
+   * Group traits (e.g. name, plan, employees). Sent as the Brizz event body alongside group_id.
    */
   traits?: {
     [k: string]: unknown
   }
   /**
-   * The user ID associated with the event.
+   * Authenticated user ID. Stored as the brizz.user_id attribute.
    */
   userId?: string
   /**
-   * The anonymous ID associated with the event.
+   * Device-level anonymous ID. Stored as the segment.anonymous_id attribute.
    */
   anonymousId?: string
   /**
-   * The timestamp of the event.
+   * Event timestamp in ISO 8601 format. Defaults to the current time if not provided.
    */
   timestamp?: string | number
   /**
-   * The Segment message ID.
+   * Unique Segment message ID. Stored as the segment.message_id attribute.
    */
   messageId?: string
   /**
-   * The Segment event context.
+   * Segment event context. Brizz extracts: context.page.url, context.page.path, context.page.referrer, context.page.title, context.userAgent, context.locale, context.ip. Note: context.sessionId is supported for backward compatibility but sessionId in properties is recommended.
    */
   context?: {
     [k: string]: unknown

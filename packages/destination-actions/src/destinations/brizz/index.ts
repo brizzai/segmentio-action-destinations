@@ -32,14 +32,16 @@ const destination: DestinationDefinition<Settings> = {
       },
       serviceName: {
         label: 'Service Name',
-        description: 'Name of this service as it appears in Brizz. Used to group events from the same application.',
+        description:
+          'Application name sent as the Brizz service_name. If omitted, falls back to the serviceName property in the event payload.',
         type: 'string',
-        required: true,
+        required: false,
         default: 'my-app'
       },
       environment: {
         label: 'Environment',
-        description: 'Deployment environment (e.g., production, staging, development).',
+        description:
+          'Deployment environment (e.g. production, staging). If omitted, falls back to the environment property in the event payload.',
         type: 'string',
         required: false,
         default: 'production'

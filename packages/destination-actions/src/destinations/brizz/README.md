@@ -17,20 +17,33 @@ All actions support batching (up to 100 events per request).
 
 Each action extracts these fields from the incoming Segment event via `@path` mappings. Users can customize these in the Segment UI.
 
-| Segment field   | Action field  | Maps to in Brizz event                                                                                     |
-| --------------- | ------------- | ---------------------------------------------------------------------------------------------------------- |
-| `$.event`       | `name`        | `name` — the event name                                                                                    |
-| `$.properties`  | `properties`  | `body` — free-form event payload                                                                           |
-| `$.traits`      | `traits`      | `body` — user or group traits (identify/group actions)                                                     |
-| `$.userId`      | `userId`      | `attributes["brizz.user_id"]`                                                                              |
-| `$.anonymousId` | `anonymousId` | `attributes["segment.anonymous_id"]`                                                                       |
-| `$.timestamp`   | `timestamp`   | `timestamp` — ISO 8601                                                                                     |
-| `$.messageId`   | `messageId`   | `attributes["segment.message_id"]`                                                                         |
-| `$.context`     | `context`     | Extracts: `sessionId`, `page.url`, `page.path`, `page.referrer`, `page.title`, `userAgent`, `locale`, `ip` |
-| `$.groupId`     | `groupId`     | Included as `group_id` in `body` (group action only)                                                       |
-| `$.category`    | `category`    | Included in `body` (page action only)                                                                      |
+| Segment field              | Action field      | Maps to in Brizz event                                                                                                                           |
+| -------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `$.event`                  | `name`            | `name` — the event name                                                                                                                          |
+| `$.properties`             | `properties`      | `body` — free-form event payload                                                                                                                 |
+| `$.traits`                 | `traits`          | `body` — user or group traits (identify/group actions)                                                                                           |
+| `$.userId`                 | `userId`          | `attributes["brizz.user_id"]`                                                                                                                    |
+| `$.anonymousId`            | `anonymousId`     | `attributes["segment.anonymous_id"]`                                                                                                             |
+| `$.timestamp`              | `timestamp`       | `timestamp` — ISO 8601                                                                                                                           |
+| `$.messageId`              | `messageId`       | `attributes["segment.message_id"]`                                                                                                               |
+| `$.context`                | `context`         | Extracts: `page.url`, `page.path`, `page.referrer`, `page.title`, `userAgent`, `locale`, `ip`. `context.sessionId` supported for backward compat |
+| `$.properties.sessionId`   | (from properties) | `session_id` — recommended location for session ID                                                                                               |
+| `$.groupId`                | `groupId`         | Included as `group_id` in `body` (group action only)                                                                                             |
+| `$.category`               | `category`        | Included in `body` (page action only)                                                                                                            |
+| `$.properties.serviceName` | (from properties) | `service_name` — if not set in destination settings                                                                                              |
+| `$.properties.environment` | (from properties) | `environment` — if not set in destination settings                                                                                               |
 
 ## Brizz Event Schema
+
+`service_name` and `environment` can be configured statically in destination settings (takes priority) or sent dynamically per-event in properties:
+
+```js
+analytics.track('Order Completed', {
+  serviceName: 'my-app',
+  environment: 'production',
+  revenue: 99.99
+})
+```
 
 Each action transforms a Segment event into a Brizz event and sends it to `POST {baseUrl}/raw/events`. The outgoing payload follows this schema:
 
@@ -63,21 +76,16 @@ Each action transforms a Segment event into a Brizz event and sends it to `POST 
 
 ### session_id
 
-The `session_id` field ties events into a user session in Brizz. Resolution order:
-
-1. `context.sessionId` — the recommended way to provide a session ID
-2. `properties.sessionId` (or `traits.sessionId` for identify/group events) — fallback
-3. Empty string `""` — if none of the above are present
+The `session_id` field ties events into a user session in Brizz. Send it as `sessionId` in event properties (recommended) or in `context.sessionId` (backward compatible):
 
 ```js
-analytics.track(
-  'Order Completed',
-  { revenue: 99.99 },
-  {
-    context: { sessionId: 'sess_abc123' }
-  }
-)
+analytics.track('Order Completed', {
+  sessionId: 'sess_abc123',
+  revenue: 99.99
+})
 ```
+
+Resolution order: `properties.sessionId` -> `traits.sessionId` -> `context.sessionId` -> empty string.
 
 ### severity_number
 
@@ -194,10 +202,10 @@ curl -X POST http://localhost:3000/trackEvent \
       "messageId": "msg-001",
       "properties": {
         "revenue": 99.99,
-        "currency": "USD"
+        "currency": "USD",
+        "sessionId": "sess_abc123"
       },
       "context": {
-        "sessionId": "sess_abc123",
         "page": { "url": "https://example.com/checkout", "path": "/checkout" },
         "userAgent": "Mozilla/5.0",
         "locale": "en-US"
@@ -260,16 +268,16 @@ curl -X POST http://localhost:3000/trackEvent \
         "event": "Product Viewed",
         "userId": "user-1",
         "timestamp": "2026-01-15T10:30:00.000Z",
-        "properties": { "product_id": "sku-100" },
-        "context": { "sessionId": "sess_abc123" }
+        "properties": { "product_id": "sku-100", "sessionId": "sess_abc123" },
+        "context": {}
       },
       {
         "type": "track",
         "event": "Product Added",
         "userId": "user-2",
         "timestamp": "2026-01-15T10:31:00.000Z",
-        "properties": { "product_id": "sku-200" },
-        "context": { "sessionId": "sess_abc123" }
+        "properties": { "product_id": "sku-200", "sessionId": "sess_abc123" },
+        "context": {}
       }
     ]
   }'
@@ -302,10 +310,11 @@ curl -X POST http://localhost:3000/identifyUser \
       "traits": {
         "email": "user@example.com",
         "name": "Jane Doe",
-        "plan": "enterprise"
+        "plan": "enterprise",
+        "sessionId": "sess_abc123"
       },
       "timestamp": "2026-01-15T10:30:00.000Z",
-      "context": { "sessionId": "sess_abc123" }
+      "context": {}
     }
   }'
 ```
@@ -359,10 +368,11 @@ curl -X POST http://localhost:3000/trackPageView \
       "properties": {
         "url": "https://example.com",
         "path": "/",
-        "title": "Home"
+        "title": "Home",
+        "sessionId": "sess_abc123"
       },
       "timestamp": "2026-01-15T10:30:00.000Z",
-      "context": { "sessionId": "sess_abc123" }
+      "context": {}
     }
   }'
 ```
@@ -415,10 +425,11 @@ curl -X POST http://localhost:3000/trackGroupEvent \
       "traits": {
         "name": "Acme Corp",
         "plan": "enterprise",
-        "employees": 120
+        "employees": 120,
+        "sessionId": "sess_abc123"
       },
       "timestamp": "2026-01-15T10:30:00.000Z",
-      "context": { "sessionId": "sess_abc123" }
+      "context": {}
     }
   }'
 ```

@@ -10,11 +10,11 @@ export interface Settings {
    */
   apiKey: string
   /**
-   * Name of this service as it appears in Brizz. Used to group events from the same application.
+   * Application name sent as the Brizz service_name. If omitted, falls back to the serviceName property in the event payload.
    */
-  serviceName: string
+  serviceName?: string
   /**
-   * Deployment environment (e.g., production, staging, development).
+   * Deployment environment (e.g. production, staging). If omitted, falls back to the environment property in the event payload.
    */
   environment?: string
 }

@@ -2,37 +2,37 @@
 
 export interface Payload {
   /**
-   * The name of the page.
+   * Name of the page. Sent as "page.{name}" in the Brizz event name, or "page_view" if omitted.
    */
   name?: string
   /**
-   * The category of the page.
+   * Page category. Included in the Brizz event body alongside page properties.
    */
   category?: string
   /**
-   * The page properties.
+   * Page properties (e.g. url, path, title, referrer). Sent as the Brizz event body.
    */
   properties?: {
     [k: string]: unknown
   }
   /**
-   * The user ID associated with the event.
+   * Authenticated user ID. Stored as the brizz.user_id attribute.
    */
   userId?: string
   /**
-   * The anonymous ID associated with the event.
+   * Device-level anonymous ID. Stored as the segment.anonymous_id attribute.
    */
   anonymousId?: string
   /**
-   * The timestamp of the event.
+   * Event timestamp in ISO 8601 format. Defaults to the current time if not provided.
    */
   timestamp?: string | number
   /**
-   * The Segment message ID.
+   * Unique Segment message ID. Stored as the segment.message_id attribute.
    */
   messageId?: string
   /**
-   * The Segment event context.
+   * Segment event context. Brizz extracts: context.page.url, context.page.path, context.page.referrer, context.page.title, context.userAgent, context.locale, context.ip. Note: context.sessionId is supported for backward compatibility but sessionId in properties is recommended.
    */
   context?: {
     [k: string]: unknown
