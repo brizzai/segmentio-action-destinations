@@ -55,6 +55,8 @@ const destination: DestinationDefinition<Settings> = {
           session_id: 'segment-connection-test',
           timestamp: new Date().toISOString(),
           source: 'segment',
+          severity_number: 9,
+          attributes: {},
           body: { test: true }
         }
       })
