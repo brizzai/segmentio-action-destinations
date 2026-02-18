@@ -73,7 +73,7 @@ Select **Brizz** from the menu. The server starts on port `3000` by default (ove
 Verifies your telemetry key against the Brizz API:
 
 ```sh
-curl -X POST http://localhost:3000/authentication \
+curl -X POST http://localhost:3000/authenticate \
   -H 'Content-Type: application/json' \
   -d '{
     "settings": {
