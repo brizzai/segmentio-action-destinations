@@ -77,6 +77,7 @@ curl -X POST http://localhost:3000/authentication \
   -H 'Content-Type: application/json' \
   -d '{
     "settings": {
+      "baseUrl": "'"$BRIZZ_BASE_URL"'",
       "apiKey": "'"$BRIZZ_API_KEY"'",
       "serviceName": "'"$BRIZZ_SERVICE_NAME"'",
       "environment": "'"$BRIZZ_ENVIRONMENT"'"
@@ -93,6 +94,7 @@ curl -X POST http://localhost:3000/trackEvent \
   -H 'Content-Type: application/json' \
   -d '{
     "settings": {
+      "baseUrl": "'"$BRIZZ_BASE_URL"'",
       "apiKey": "'"$BRIZZ_API_KEY"'",
       "serviceName": "'"$BRIZZ_SERVICE_NAME"'",
       "environment": "'"$BRIZZ_ENVIRONMENT"'"
@@ -135,6 +137,7 @@ curl -X POST http://localhost:3000/trackEvent \
   -H 'Content-Type: application/json' \
   -d '{
     "settings": {
+      "baseUrl": "'"$BRIZZ_BASE_URL"'",
       "apiKey": "'"$BRIZZ_API_KEY"'",
       "serviceName": "'"$BRIZZ_SERVICE_NAME"'",
       "environment": "'"$BRIZZ_ENVIRONMENT"'"
@@ -174,6 +177,7 @@ curl -X POST http://localhost:3000/identifyUser \
   -H 'Content-Type: application/json' \
   -d '{
     "settings": {
+      "baseUrl": "'"$BRIZZ_BASE_URL"'",
       "apiKey": "'"$BRIZZ_API_KEY"'",
       "serviceName": "'"$BRIZZ_SERVICE_NAME"'",
       "environment": "'"$BRIZZ_ENVIRONMENT"'"
@@ -206,6 +210,7 @@ curl -X POST http://localhost:3000/trackPageView \
   -H 'Content-Type: application/json' \
   -d '{
     "settings": {
+      "baseUrl": "'"$BRIZZ_BASE_URL"'",
       "apiKey": "'"$BRIZZ_API_KEY"'",
       "serviceName": "'"$BRIZZ_SERVICE_NAME"'",
       "environment": "'"$BRIZZ_ENVIRONMENT"'"
@@ -241,6 +246,7 @@ curl -X POST http://localhost:3000/trackGroupEvent \
   -H 'Content-Type: application/json' \
   -d '{
     "settings": {
+      "baseUrl": "'"$BRIZZ_BASE_URL"'",
       "apiKey": "'"$BRIZZ_API_KEY"'",
       "serviceName": "'"$BRIZZ_SERVICE_NAME"'",
       "environment": "'"$BRIZZ_ENVIRONMENT"'"
