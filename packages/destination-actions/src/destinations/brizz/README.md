@@ -17,21 +17,21 @@ All actions support batching (up to 100 events per request).
 
 Each action extracts these fields from the incoming Segment event via `@path` mappings. Users can customize these in the Segment UI.
 
-| Segment field              | Action field      | Maps to in Brizz event                                                                                                                           |
-| -------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `$.event`                  | `name`            | `name` — the event name                                                                                                                          |
-| `$.properties`             | `properties`      | `body` — free-form event payload                                                                                                                 |
-| `$.traits`                 | `traits`          | `body` — user or group traits (identify/group actions)                                                                                           |
-| `$.userId`                 | `userId`          | `attributes["brizz.user_id"]`                                                                                                                    |
-| `$.anonymousId`            | `anonymousId`     | `attributes["segment.anonymous_id"]`                                                                                                             |
-| `$.timestamp`              | `timestamp`       | `timestamp` — ISO 8601                                                                                                                           |
-| `$.messageId`              | `messageId`       | `attributes["segment.message_id"]`                                                                                                               |
-| `$.context`                | `context`         | Extracts: `page.url`, `page.path`, `page.referrer`, `page.title`, `userAgent`, `locale`, `ip`. `context.sessionId` supported for backward compat |
-| `$.properties.sessionId`   | (from properties) | `session_id` — recommended location for session ID                                                                                               |
-| `$.groupId`                | `groupId`         | Included as `group_id` in `body` (group action only)                                                                                             |
-| `$.category`               | `category`        | Included in `body` (page action only)                                                                                                            |
-| `$.properties.serviceName` | (from properties) | `service_name` — if not set in destination settings                                                                                              |
-| `$.properties.environment` | (from properties) | `environment` — if not set in destination settings                                                                                               |
+| Segment field              | Action field      | Maps to in Brizz event                                                                        |
+| -------------------------- | ----------------- | --------------------------------------------------------------------------------------------- |
+| `$.event`                  | `name`            | `name` — the event name                                                                       |
+| `$.properties`             | `properties`      | `body` — free-form event payload                                                              |
+| `$.traits`                 | `traits`          | `body` — user or group traits (identify/group actions)                                        |
+| `$.userId`                 | `userId`          | `attributes["brizz.user_id"]`                                                                 |
+| `$.anonymousId`            | `anonymousId`     | `attributes["segment.anonymous_id"]`                                                          |
+| `$.timestamp`              | `timestamp`       | `timestamp` — ISO 8601                                                                        |
+| `$.messageId`              | `messageId`       | `attributes["segment.message_id"]`                                                            |
+| `$.context`                | `context`         | Extracts: `page.url`, `page.path`, `page.referrer`, `page.title`, `userAgent`, `locale`, `ip` |
+| `$.properties.sessionId`   | (from properties) | `session_id` — recommended location for session ID                                            |
+| `$.groupId`                | `groupId`         | Included as `group_id` in `body` (group action only)                                          |
+| `$.category`               | `category`        | Included in `body` (page action only)                                                         |
+| `$.properties.serviceName` | (from properties) | `service_name` — if not set in destination settings                                           |
+| `$.properties.environment` | (from properties) | `environment` — if not set in destination settings                                            |
 
 ## Brizz Event Schema
 
@@ -76,7 +76,7 @@ Each action transforms a Segment event into a Brizz event and sends it to `POST 
 
 ### session_id
 
-The `session_id` field ties events into a user session in Brizz. Send it as `sessionId` in event properties (recommended) or in `context.sessionId` (backward compatible):
+The `session_id` field ties events into a user session in Brizz. Send it as `sessionId` in event properties (track/page) or traits (identify/group):
 
 ```js
 analytics.track('Order Completed', {
@@ -85,7 +85,7 @@ analytics.track('Order Completed', {
 })
 ```
 
-Resolution order: `properties.sessionId` -> `traits.sessionId` -> `context.sessionId` -> empty string.
+Resolution order: `properties.sessionId` -> `traits.sessionId` -> empty string.
 
 ### severity_number
 

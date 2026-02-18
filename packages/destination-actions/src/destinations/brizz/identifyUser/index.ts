@@ -47,7 +47,7 @@ const action: ActionDefinition<Settings, Payload> = {
     context: {
       label: 'Event Context',
       description:
-        'Segment event context. Brizz extracts: context.page.url, context.page.path, context.page.referrer, context.page.title, context.userAgent, context.locale, context.ip. Note: context.sessionId is supported for backward compatibility but sessionId in properties is recommended.',
+        'Segment event context. Brizz extracts page info (context.page.url, context.page.path, context.page.referrer, context.page.title), context.userAgent, context.locale, and context.ip.',
       type: 'object',
       required: false,
       default: { '@path': '$.context' },
