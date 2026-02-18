@@ -93,7 +93,7 @@ export function sendEvent(
 
   const baseUrl = settings.baseUrl || DEFAULT_BASE_URL
 
-  return request(`${baseUrl}/api/v1/telemetry/raw/events`, {
+  return request(`${baseUrl}/raw/events`, {
     method: 'post',
     json
   })

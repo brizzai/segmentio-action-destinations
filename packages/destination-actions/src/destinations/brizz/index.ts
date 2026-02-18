@@ -45,7 +45,7 @@ const destination: DestinationDefinition<Settings> = {
     },
     testAuthentication: async (request, { settings }) => {
       const baseUrl = settings.baseUrl || 'https://telemetry.brizz.dev'
-      await request(`${baseUrl}/api/v1/telemetry/raw/events`, {
+      await request(`${baseUrl}/raw/events`, {
         method: 'post',
         json: {
           name: 'segment.connection_test',

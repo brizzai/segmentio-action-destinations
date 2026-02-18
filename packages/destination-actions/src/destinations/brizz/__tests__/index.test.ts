@@ -4,8 +4,8 @@ import Definition from '../index'
 
 const testDestination = createTestIntegration(Definition)
 
-const BASE_URL = 'https://app.example.com'
-const EVENTS_ENDPOINT = '/api/v1/telemetry/raw/events'
+const BASE_URL = 'https://app.example.com/api/v1/telemetry'
+const EVENTS_ENDPOINT = '/raw/events'
 const SUCCESS_RESPONSE = { status: 'success', total: 1, success: 1, skipped: 0, failed: 0 }
 
 const SETTINGS = {

@@ -33,9 +33,10 @@ Create a `.env` file at the repository root (it is already gitignored):
 BRIZZ_API_KEY=brizz-ing_your_api_key
 BRIZZ_SERVICE_NAME=my-app
 BRIZZ_ENVIRONMENT=development
-# Only set this if you are targeting a self-hosted or staging Brizz instance.
+# Override the telemetry endpoint for local or self-hosted environments.
 # Defaults to https://telemetry.brizz.dev when omitted.
-# BRIZZ_BASE_URL=https://telemetry.brizz.dev
+# For local development against the Brizz gateway (port 4002):
+BRIZZ_BASE_URL=http://localhost:4002/api/v1/telemetry
 ```
 
 ## Testing
